@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贖回殖利率計算器</title>
+    <style>
+        #myCalculator {
+            border: 2px solid #007BFF; /* 邊框顏色 */
+            padding: 10px;
+            margin: 10px auto;
+            background-color: #F0F8FF; /* 背景顏色 */
+            max-width: 250px; /* 最大寬度 */
+            border-radius: 8px; /* 圓角邊框 */
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+        }
+        #myCalculator h1 {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+        #myCalculator label {
+            display: block;
+            font-size: 1rem;
+            color: #000;
+            margin-bottom: 2px;
+            font-weight: bold;
+        }
+        #myCalculator input {
+            width: 100%;
+            padding: 4px;
+            margin-bottom: 6px;
+            border: 1px solid #CCC;
+            border-radius: 4px;
+        }
+        #myCalculator button {
+            width: 100%;
+            padding: 5px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease; /* 加入平滑過渡與縮放效果 */
+        }
+        #myCalculator button:active {
+            background-color: #0056b3; /* 按下時的背景顏色 */
+            transform: scale(0.98); /* 按下時的縮放效果 */
+        }
+        #myCalculator p {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #333;
+            text-align: center;
+        }
+    </style>
+    <script>
+        function calculateYTC() {
+            const purchasePrice = parseFloat(document.getElementById("purchasePrice").value);
+            const yearsHeld = parseFloat(document.getElementById("yearsHeld").value);
+            const annualDividend = parseFloat(document.getElementById("annualDividend").value);
+            const sellPrice = parseFloat(document.getElementById("sellPrice").value);
+
+            const resultElement = document.getElementById("result");
+            if ([purchasePrice, yearsHeld, annualDividend, sellPrice].some(isNaN)) {
+                resultElement.innerText = "錯誤：請輸入有效數字";
+                resultElement.style.color = "red"; /* 錯誤訊息顯示紅色 */
+                return;
+            }
+            if (yearsHeld === 0) {
+                resultElement.innerText = "錯誤：持有年數不能為 0";
+                resultElement.style.color = "red"; /* 錯誤訊息顯示紅色 */
+                return;
+            }
+
+            const averageCapital = (purchasePrice + sellPrice) / 2;
+            const annualCapitalGain = (sellPrice - purchasePrice) / yearsHeld;
+            const ytc = ((annualDividend + annualCapitalGain) / averageCapital) * 100;
+
+            resultElement.innerText = `贖回殖利率：${ytc.toFixed(2)}%`;
+            resultElement.style.color = "green"; /* 正確結果顯示綠色 */
+        }
+    </script>
+</head>
+<body>
+    <div id="myCalculator">
+        <h1>YTC 計算器</h1>
+        <label for="purchasePrice">買入價格：</label>
+        <input type="number" id="purchasePrice" required>
+
+        <label for="yearsHeld">持有年數：</label>
+        <input type="number" id="yearsHeld" required>
+
+        <label for="annualDividend">每年配息：</label>
+        <input type="number" id="annualDividend" required>
+
+        <label for="sellPrice">賣出價格：</label>
+        <input type="number" id="sellPrice" required>
+
+        <button onclick="calculateYTC()">計算</button>
+        <p id="result"></p>
+    </div>
+</body>
+</html>
